@@ -1,19 +1,27 @@
-﻿name-template: 'v$RESOLVED_VERSION 🌈'
+name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
+
 categories:
-  - title: '🚀 Features'
+  - title: '## Features'
     labels:
-      - 'feature'
       - 'enhancement'
-  - title: '🐛 Bug Fixes'
+  - title: '## Bug Fixes'
     labels:
-      - 'fix'
       - 'bugfix'
       - 'bug'
-  - title: '🧰 Maintenance'
-    label: 'chore'
-change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+  - title: '## Documentation'
+    labels:
+      - 'documentation'
+  - title: '## Updated Dependencies'
+    labels:
+      - 'dependencies'
+  - title: '## Maintenance'
+    labels:
+      - 'maintenance'
+
+change-template: '- $TITLE (#$NUMBER) by @$AUTHOR'  # @$AUTHOR not used here, names in Contributors section
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
+
 version-resolver:
   major:
     labels:
@@ -21,10 +29,37 @@ version-resolver:
   minor:
     labels:
       - 'minor'
+      - 'enhancement'
   patch:
     labels:
       - 'patch'
+      - 'dependencies'
+      - 'bug'
   default: patch
+
+autolabeler:
+  - label: 'maintenance'
+    files:
+      - '.github/*'
+      - '.vscode/*'
+    branch:
+      - '/maintenance-.+/'
+  - label: 'documentation'
+    files:
+      - '*.md'
+      - 'docs/*'
+    branch:
+      - '/docs.+/'
+  - label: 'bug'
+    branch:
+      - '/fix-.+/'
+    title:
+      - '/fix.+/'
+  - label: 'enhancement'
+    branch:
+      - '/feature-.+/'
+      - '/feat-.+/'
+
 template: |
   ## Changes
 
