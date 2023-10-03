@@ -4,6 +4,8 @@ on:
     types:
      - opened
      - reopened
+permissions:
+  pull-requests: write
 
 jobs:
   debug:
@@ -18,9 +20,6 @@ jobs:
   label-dependabot-python:
     # Python Dependencies
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      issues: write
 
     # github.actor == 'dependabot[bot]' &&  
     if: contains(github.event.pull_request.labels.*.name, 'python')
@@ -47,10 +46,10 @@ jobs:
   label-dependabot-github-actions:
     # GitHub Actions Dependencies
     runs-on: ubuntu-latest
-    
+    if: contains(github.event.pull_request.labels.*.name, 'github_actions')
     steps:        
       - name: "GitHub Actions: dependencies:development"
         uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS_TO_ADD: dependencies:development, invalid
+          LABELS_TO_ADD: dependencies:development
