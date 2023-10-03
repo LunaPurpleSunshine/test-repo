@@ -5,6 +5,10 @@ from pathlib import Path
 log = logging.getLogger(__name__)
 
 
+def return_none(*args, **kwargs) -> None:
+    return None
+
+
 def custom_namer(name: str) -> str:
     """Custom namer for a RotatingFileHandler.
     Inserts the date between the stem and the final suffix.
