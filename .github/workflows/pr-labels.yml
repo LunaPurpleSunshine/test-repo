@@ -9,11 +9,11 @@ jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - run: echo github.ref= ${{ github.ref }}
-      - run: echo github.ref_name= ${{ github.ref_name }}
-      - run: echo github.event.pull_request.labels.*.name= ${{ join(github.event.pull_request.labels.*.name, ', ') }}
-      - run: echo github.event.pull_request.base= ${{ join(github.event.pull_request.base, ', ') }}
-      - run: echo github.head_ref= ${{ github.head_ref }}
+      - run: echo github.ref=${{ github.ref }}
+      - run: echo github.ref_name=${{ github.ref_name }}
+      - run: echo github.event.pull_request.labels.*.name=${{ join(github.event.pull_request.labels.*.name, ', ') }}
+      - run: echo github.event.pull_request.base=${{ join(github.event.pull_request.base, ', ') }}
+      - run: echo github.head_ref=${{ github.head_ref }}
 
   label-dependabot-python:
     # Python Dependencies
@@ -47,7 +47,7 @@ jobs:
   label-dependabot-github-actions:
     # GitHub Actions Dependencies
     runs-on: ubuntu-latest
-    if: contains(github.head_ref, 'python')
+    
     steps:        
       - name: "GitHub Actions: dependencies:development"
         uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
