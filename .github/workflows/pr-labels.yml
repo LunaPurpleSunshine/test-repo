@@ -18,6 +18,10 @@ jobs:
   label-dependabot-python:
     # Python Dependencies
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+
     # github.actor == 'dependabot[bot]' &&  
     if: contains(github.event.pull_request.labels.*.name, 'python')
     steps:
