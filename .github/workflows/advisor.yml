@@ -21,6 +21,7 @@ jobs:
   advisor:
     runs-on: ubuntu-latest
     steps:
+    # https://github.com/GitHubSecurityLab/actions-permissions/blob/main/advisor/README.md
     - uses: GitHubSecurityLab/actions-permissions/advisor@v1
       with:
         name: ${{ inputs.name }}
