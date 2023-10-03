@@ -4,6 +4,7 @@ on:
     types:
      - opened
      - reopened
+     - edited
 permissions:
   pull-requests: write
 
@@ -36,6 +37,7 @@ jobs:
       - run: echo github.event.pull_request.labels.*.name=${{ join(github.event.pull_request.labels.*.name, ', ') }}
       - run: echo github.event.pull_request.base=${{ join(github.event.pull_request.base, ', ') }}
       - run: echo github.head_ref=${{ github.head_ref }}
+      - run: echo github.action.pull_request.url=${{ github.action.pull_request.url }}
 
   label-dependabot-python:
     # Python Dependencies
@@ -44,14 +46,15 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'python')
     env:
       GH_TOKEN: ${{ github.token }}
+      PR_URL: ${{ github.action.pull_request.url }}
     steps:
       - name: "Python: dependencies:production"
         if: contains(github.head_ref, 'development-') == false
-        run: gh pr edit "$PR_URL" --add-label "dependencies:production"
+        run: gh pr edit "${{env.PR_URL}}" --add-label "dependencies:production"
 
       - name: "Python: dependencies:development"
         if: contains(github.head_ref, 'development-')
-        run: gh pr edit "$PR_URL" --add-label "dependencies:development"
+        run: gh pr edit "${{env.PR_URL}}" --add-label "dependencies:development"
 
   label-dependabot-github-actions:
     # GitHub Actions Dependencies
@@ -59,6 +62,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'github_actions')
     env:
       GH_TOKEN: ${{ github.token }}
+      PR_URL: ${{ github.action.pull_request.url }}
     steps:        
       - name: "GitHub Actions: dependencies:development"
-        run: gh pr edit "$PR_URL" --add-label "dependencies:development"
+        run: gh pr edit "${{env.PR_URL}}" --add-label "dependencies:development"
