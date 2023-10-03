@@ -9,9 +9,10 @@ jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - run: echo github.re=${{ github.ref }}
-      - run: echo github.ref_name=${{ github.ref_name }}
-      - run: echo github.event.pull_request.labels=${{ github.event.pull_request.labels }}
+      - run: echo github.ref= ${{ github.ref }}
+      - run: echo github.ref_name= ${{ github.ref_name }}
+      - run: echo github.event.pull_request.labels= ${{ join(github.event.pull_request.labels, ', ') }}
+      - run: echo github.head_ref= ${{ github.head_ref }}
 
   label-dependabot-python:
     # Python Dependencies
