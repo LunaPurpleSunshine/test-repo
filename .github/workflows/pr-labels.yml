@@ -22,26 +22,31 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'python')
     steps:
       - name: "Python: dependencies:production"
-        uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
+        uses: MakarovAleksey/add-labels@v1
         if: contains(github.head_ref, 'development-') == false
-        with:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS_TO_ADD: dependencies:production
+        with:
+          labels: dependencies:production
 
       - name: "Python: dependencies:development"
-        uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
+        uses: MakarovAleksey/add-labels@v1
         if: contains(github.head_ref, 'development-')
-        with:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS_TO_ADD: 'dependencies:development,bug'
+        with:
+          labels: dependencies:development
 
   label-dependabot-github-actions:
     # GitHub Actions Dependencies
     runs-on: ubuntu-latest
-    if: contains(github.head_ref, 'python')
+    if: contains(github.head_ref, 'github-actions')
     steps:        
       - name: "GitHub Actions: dependencies:development"
-        uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
-        with:
+        uses: MakarovAleksey/add-labels@v1
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS_TO_ADD: 'dependencies:development, invalid'
+        with:
+          labels: |
+            dependencies:development
+            invalid
