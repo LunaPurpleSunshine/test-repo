@@ -1,0 +1,38 @@
+name: Pull Request Validation
+on:
+  pull_request:
+    types:
+     - opened
+
+jobs:
+
+  label-dependabot-python:
+    # Python Dependencies
+    runs-on: ubuntu-latest
+    # github.actor == 'dependabot[bot]' &&  
+    if: contains(github.event.pull_request.labels, 'python')
+    steps:
+      - name: "Python: dependencies:production"
+        uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
+        if: contains(github.event.pull_request.labels, 'python') && !contains(github.ref_name, 'development-')
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABELS_TO_ADD: dependencies:production
+
+      - name: "Python: dependencies:development"
+        uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
+        if: contains(github.event.pull_request.labels, 'python') && contains(github.ref_name, 'development-')
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABELS_TO_ADD: dependencies:development
+
+  label-dependabot-github-actions:
+    # GitHub Actions Dependencies
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels, 'github-actions')
+    steps:        
+      - name: "GitHub Actions: dependencies:development"
+        uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABELS_TO_ADD: dependencies:development
