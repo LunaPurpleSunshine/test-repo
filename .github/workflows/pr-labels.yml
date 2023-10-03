@@ -6,6 +6,12 @@ on:
      - reopened
 
 jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo github.re=${{ github.ref }}
+      - run: echo github.ref_name=${{ github.ref_name }}
+      - run: echo github.event.pull_request.labels=${{ github.event.pull_request.labels }}
 
   label-dependabot-python:
     # Python Dependencies
