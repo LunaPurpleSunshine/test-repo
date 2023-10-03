@@ -3,6 +3,7 @@ on:
   pull_request:
     types:
      - opened
+     - reopened
 
 jobs:
 
@@ -14,14 +15,14 @@ jobs:
     steps:
       - name: "Python: dependencies:production"
         uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
-        if: contains(github.event.pull_request.labels, 'python') && !contains(github.ref_name, 'development-')
+        if: contains(github.ref_name, 'development-') == false
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LABELS_TO_ADD: dependencies:production
 
       - name: "Python: dependencies:development"
         uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
-        if: contains(github.event.pull_request.labels, 'python') && contains(github.ref_name, 'development-')
+        if: contains(github.ref_name, 'development-')
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LABELS_TO_ADD: dependencies:development
