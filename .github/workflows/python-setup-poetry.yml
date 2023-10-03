@@ -1,0 +1,70 @@
+name: Setup Code Environment
+on:
+  workflow_call:
+    inputs:
+      poetry-create-venv:
+        type: boolean
+        default: true
+        description: Whether poetry should create the venv or not
+      generate-requirements-txt:
+        type: string
+        default: 'none'
+        description: |
+          Whether to poetry should generate a requirements.txt.
+          Valid options: 'none', 'main' and 'dev'.
+      pip-install:
+        type: boolean
+        default: false
+        description: |
+          Whether to pip install dependencies.
+          Only valid if poetry-create-venv is false and a requirements.txt has been generated.
+          Will automatically generate main requirements if generate-requirements-txt has not been given.
+
+
+jobs:
+  checkout-setup-poetry:
+    runs-on: ubuntu-latest
+    steps:
+      # Get repo, python, and poetry
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        id: setup-python
+        with:
+          python-version: "3.11"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.6.1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      # Load cached venv if cache exists, else install with poetry
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        if: inputs.poetry-create-venv
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Poetry install dependencies
+        if: inputs.poetry-create-venv && steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --with dev --no-interaction --no-root
+
+      - name: Generate main requirements.txt
+        id: generate-requirements
+        if: inputs.generate-requirements-txt == 'main' || (inputs.pip-install && inputs.generate-requirements-txt == 'none')
+        run: poetry export --only main -f requirements.txt -o requirements.txt
+
+      - name: Generate dev requirements.txt
+        id: generate-dev-requirements
+        if: inputs.generate-requirements-txt == 'dev'
+        run: poetry export --with dev -f requirements.txt -o requirements.txt
+
+      - name: Pip install dependencies
+        if: inputs.poetry-create-venv == false && inputs.pip-install && (steps.generate-requirements.outcome == 'success' || steps.generate-dev-requirements == 'success')
+        run: pip install -r requirements.txt
