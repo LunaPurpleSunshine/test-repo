@@ -11,7 +11,7 @@ jobs:
     steps:
       - run: echo github.ref= ${{ github.ref }}
       - run: echo github.ref_name= ${{ github.ref_name }}
-      - run: echo github.event.pull_request.labels= ${{ join(github.event.pull_request.labels, ', ') }}
+      - run: echo github.event.pull_request.labels.name= ${{ join(github.event.pull_request.labels.name, ', ') }}
       - run: echo github.head_ref= ${{ github.head_ref }}
 
   label-dependabot-python:
@@ -22,14 +22,14 @@ jobs:
     steps:
       - name: "Python: dependencies:production"
         uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
-        if: contains(github.ref_name, 'development-') == false
+        if: contains(github.head_ref, 'development-') == false
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LABELS_TO_ADD: dependencies:production
 
       - name: "Python: dependencies:development"
         uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
-        if: contains(github.ref_name, 'development-')
+        if: contains(github.head_ref, 'development-')
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LABELS_TO_ADD: dependencies:development
@@ -37,7 +37,7 @@ jobs:
   label-dependabot-github-actions:
     # GitHub Actions Dependencies
     runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.labels, 'github-actions')
+    if: contains(github.head_ref, 'github-actions')
     steps:        
       - name: "GitHub Actions: dependencies:development"
         uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
