@@ -11,11 +11,13 @@ on:
       - master
 
 jobs:
+  checkout-setup-poetry:
+    # Setup Repository, Python & Poetry
+    uses: lunapurplesunshine/test-repo/.github/workflows/python-setup-poetry.yml@master
+
   linting-and-format:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Repository, Python & Poetry
-        uses: lunapurplesunshine/test-repo/.github/workflows/python-setup-poetry.yml@master
 
       # Run linting, formatting, etc.
       # if condition: success() || failure() is used to ensure all steps run, even if one fails
