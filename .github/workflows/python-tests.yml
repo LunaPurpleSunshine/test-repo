@@ -39,9 +39,6 @@ jobs:
   pytest:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Repository, Python & Poetry
-        uses: lunapurplesunshine/test-repo/.github/workflows/python-setup-poetry.yml@master
-
       # Run python tests
       - name: Run pytest
         uses: pavelzw/pytest-action@v2.1.3
