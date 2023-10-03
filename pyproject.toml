@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "test-repo"
+version = "0.1.0"
+description = "Test repository, used to try stuff out."
+authors = ["Andrew Kinsman <69199502+LunaPurpleSunshine@users.noreply.github.com>"]
+license = "ISC"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+hypothesis = "^6.87.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
