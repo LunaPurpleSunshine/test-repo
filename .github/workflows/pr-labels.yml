@@ -5,8 +5,13 @@ on:
      - opened
      - reopened
      - edited
+
 permissions:
   pull-requests: write
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PR_URL: ${{github.event.pull_request.html_url}}
 
 jobs:
   dependabot-metadata:
@@ -44,9 +49,6 @@ jobs:
     runs-on: ubuntu-latest
     # github.actor == 'dependabot[bot]' &&  
     if: contains(github.event.pull_request.labels.*.name, 'python')
-    env:
-      GH_TOKEN: ${{ github.token }}
-      PR_URL: ${{github.event.pull_request.html_url}}
     steps:
       - name: "Python: dependencies:production"
         if: contains(github.head_ref, 'development-') == false
@@ -60,9 +62,6 @@ jobs:
     # GitHub Actions Dependencies
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'github_actions')
-    env:
-      GH_TOKEN: ${{ github.token }}
-      PR_URL: ${{github.event.pull_request.html_url}}
     steps:        
       - name: "GitHub Actions: dependencies:development"
         run: gh pr edit "$PR_URL" --add-label "dependencies:development"
