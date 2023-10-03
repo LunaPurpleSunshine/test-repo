@@ -42,7 +42,7 @@ jobs:
         if: contains(github.head_ref, 'development-')
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS_TO_ADD: 'dependencies:development,bug'
+          LABELS_TO_ADD: dependencies:development
 
   label-dependabot-github-actions:
     # GitHub Actions Dependencies
@@ -53,4 +53,4 @@ jobs:
         uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS_TO_ADD: 'dependencies:development, invalid'
+          LABELS_TO_ADD: dependencies:development, invalid
