@@ -46,7 +46,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'python')
     env:
       GH_TOKEN: ${{ github.token }}
-      PR_URL: ${{ github.action.pull_request.url }}
+      PR_URL: ${{github.event.pull_request.html_url}}
     steps:
       - name: "Python: dependencies:production"
         if: contains(github.head_ref, 'development-') == false
@@ -62,7 +62,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'github_actions')
     env:
       GH_TOKEN: ${{ github.token }}
-      PR_URL: ${{ github.action.pull_request.url }}
+      PR_URL: ${{github.event.pull_request.html_url}}
     steps:        
       - name: "GitHub Actions: dependencies:development"
-        run: gh pr edit "${{env.PR_URL}}" --add-label "dependencies:development"
+        run: gh pr edit "$PR_URL" --add-label "dependencies:development"
