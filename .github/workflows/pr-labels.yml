@@ -1,4 +1,4 @@
-name: Pull Request Validation
+name: Pull Request Labler
 on:
   pull_request:
     types:
