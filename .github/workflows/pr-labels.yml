@@ -42,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     # github.actor == 'dependabot[bot]' &&  
     if: contains(github.event.pull_request.labels.*.name, 'python')
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: "Python: dependencies:production"
         if: contains(github.head_ref, 'development-') == false
@@ -55,6 +57,8 @@ jobs:
     # GitHub Actions Dependencies
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'github_actions')
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:        
       - name: "GitHub Actions: dependencies:development"
         run: gh pr edit "$PR_URL" --add-label "dependencies:development"
