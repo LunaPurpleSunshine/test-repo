@@ -33,15 +33,15 @@ jobs:
         if: contains(github.head_ref, 'development-')
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS_TO_ADD: dependencies:development
+          LABELS_TO_ADD: 'dependencies:development,bug'
 
   label-dependabot-github-actions:
     # GitHub Actions Dependencies
     runs-on: ubuntu-latest
-    if: contains(github.head_ref, 'github-actions')
+    if: contains(github.head_ref, 'python')
     steps:        
       - name: "GitHub Actions: dependencies:development"
         uses: RobinJesba/GitHub-Labeler-Action@v0.1.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS_TO_ADD: dependencies:development
+          LABELS_TO_ADD: 'dependencies:development, invalid'
