@@ -1,4 +1,5 @@
 import logging
+import random
 from datetime import datetime
 from pathlib import Path
 
@@ -30,3 +31,7 @@ def custom_namer(name: str) -> str:
         raise ValueError(name)
     date = str(datetime.now().date())
     return f"{stem}.{date}{name_path.suffix}"
+
+
+def roll_d6(count: int) -> list[int]:
+    return [random.randint(1, 6) for _ in range(1, count+1)]

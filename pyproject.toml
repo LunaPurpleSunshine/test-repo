@@ -24,7 +24,7 @@ src_paths = [".", "tests/"]
 
 [tool.pytest.ini_options]
 pythonpath = "."
-testpaths = ["tests/"]
+testpaths = ["test/"]
 xfail_strict = true
 markers = ["no_test_env"]
 

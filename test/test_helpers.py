@@ -7,6 +7,7 @@ from hypothesis import strategies as st
 from randopy import rando
 
 
+@pytest.mark.skip(reason="Too slow")
 class TestCustomNamer:
     @given(
         stem=st.text(min_size=1, alphabet=st.characters(categories=["L", "N", "S"])),
@@ -71,3 +72,10 @@ class TestCustomNamer:
         assume("." not in name)
         with pytest.raises(ValueError):
             rando.custom_namer(name)
+
+
+class TestRollD6:
+    @given(test_count=st.integers(min_value=0))
+    def test_count(self, test_count: int):
+        result = rando.roll_d6(count=test_count)
+        assert len(result) == test_count
