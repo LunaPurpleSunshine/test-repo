@@ -6,12 +6,12 @@ on:
      - reopened
      - edited
 
-permissions:
-  pull-requests: write
-
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PR_URL: ${{github.event.pull_request.html_url}}
+
+permissions:
+  pull-requests: write
 
 jobs:
   dependabot-metadata:
