@@ -39,7 +39,7 @@ jobs:
           run: ping -c 5 ${{ secrets.PRIVATE_REGISTRY_IP }}
     
         - name: Test DNS resolution
-          run: dig ${{ secrets.PRIVATE_REGISTRY_URL }}
+          run: dig ${{ secrets.PRIVATE_REGISTRY_URL }} @1.1.1.1
         
         - name: Test Tailscale URL ping
           run: ping -c 5 ${{ secrets.PRIVATE_REGISTRY_URL }}
