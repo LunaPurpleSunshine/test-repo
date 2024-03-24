@@ -41,8 +41,11 @@ jobs:
         - name: Test google DNS resolution
           run: dig google.com @8.8.8.8
     
-        - name: Test DNS resolution
+        - name: Test Cloudflare DNS resolution
           run: dig ${{ secrets.PRIVATE_REGISTRY_URL }} @1.1.1.1
+        
+        - name: Test DNS resolution
+          run: dig ${{ secrets.PRIVATE_REGISTRY_URL }}
         
         - name: Test Tailscale URL ping
           run: ping -c 5 ${{ secrets.PRIVATE_REGISTRY_URL }}
