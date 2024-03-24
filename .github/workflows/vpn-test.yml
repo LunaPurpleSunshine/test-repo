@@ -9,9 +9,13 @@ env:
 
 permissions: {}
 
+
 jobs:
   tailscale-action:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-20.04]
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: read
       packages: write
