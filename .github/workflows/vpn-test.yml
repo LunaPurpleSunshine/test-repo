@@ -12,10 +12,10 @@ permissions: {}
 
 jobs:
   tailscale-action:
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-20.04]
-    runs-on: ${{ matrix.os }}
+    # strategy:
+    #   matrix:
+    #     os: [ubuntu-22.04, ubuntu-20.04]
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
