@@ -38,6 +38,9 @@ jobs:
         - name: Test Tailscale IP ping
           run: ping -c 5 ${{ secrets.PRIVATE_REGISTRY_IP }}
     
+        - name: Test google DNS resolution
+          run: dig google.com @8.8.8.8
+    
         - name: Test DNS resolution
           run: dig ${{ secrets.PRIVATE_REGISTRY_URL }} @1.1.1.1
         
