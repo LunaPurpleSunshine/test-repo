@@ -35,7 +35,7 @@ jobs:
           run: ping -c 5 ${{ secrets.PRIVATE_REGISTRY_IP }}
     
         - name: Test DNS resolution
-          run: echo "$(dig ${{ secrets.PRIVATE_REGISTRY_URL }})"
+          run: dig ${{ secrets.PRIVATE_REGISTRY_URL }}
         
         - name: Test Tailscale URL ping
           run: ping -c 5 ${{ secrets.PRIVATE_REGISTRY_URL }}
