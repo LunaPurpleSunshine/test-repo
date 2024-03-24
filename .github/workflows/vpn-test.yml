@@ -32,13 +32,13 @@ jobs:
             tags: tag:ci
 
         - name: Test Tailscale IP ping
-          run: ping ${{ secrets.PRIVATE_REGISTRY_IP }}""
+          run: ping -c 5 ${{ secrets.PRIVATE_REGISTRY_IP }}"
     
         - name: Test DNS resolution
           run: echo "$(dig ${{ secrets.PRIVATE_REGISTRY_URL }})"
         
         - name: Test Tailscale URL ping
-          run: ping ${{ secrets.PRIVATE_REGISTRY_URL }}""
+          run: ping -c 5 ${{ secrets.PRIVATE_REGISTRY_URL }}""
 
         - name: Login to Private Docker Registry via Tailscale
           uses: docker/login-action@v3
