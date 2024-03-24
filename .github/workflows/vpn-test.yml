@@ -1,4 +1,4 @@
-name: Build & Publish Docker Image
+name: VPN Connectivity Test
 
 on:
   workflow_dispatch:
