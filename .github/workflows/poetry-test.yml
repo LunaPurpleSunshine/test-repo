@@ -29,6 +29,9 @@ jobs:
 
       - name: Generate requirements.txt
         run: |
+            echo "Installing poetry-plugin-export"
             poetry self add poetry-plugin-export
+            echo "Listing plugins"
             poetry self show plugins
+            echo "Exporting requirements.txt"
             poetry export --only main -f requirements.txt -o requirements.txt
