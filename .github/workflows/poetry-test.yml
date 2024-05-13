@@ -1,16 +1,13 @@
-name: Test Poetry
+name: Poetry Plugins Test
 
 on:
-  push:
-    branches:
-      - master
   # Run build manually from the Actions tab, will be tagged with branch name
   workflow_dispatch:
 
 permissions: {}
 
 jobs:
-  docker:
+  poetry-plugin-export:
     runs-on: ubuntu-latest
 
     steps:
