@@ -30,11 +30,8 @@ jobs:
           virtualenvs-in-project: true
           installer-parallel: true
 
-      - name: Install Poetry plugins
-        run: poetry self add poetry-plugin-export
-
-      - name: List Poetry plugins
-        run: poetry self show plugins
-
       - name: Generate requirements.txt
-        run: poetry export --only main -f requirements.txt -o requirements.txt
+        run: |
+            poetry self add poetry-plugin-export
+            poetry self show plugins
+            poetry export --only main -f requirements.txt -o requirements.txt
