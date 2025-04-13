@@ -53,7 +53,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Check if there is a draft release and exit if not
-          draft=$(gh release view ${{ steps.create_release.outputs.tag_name }} --json isDraft --jq '.isDraft')
+          draft=$(gh release view ${{ steps.create_release.outputs.tag_name }} --json isDraft --jq '.isDraft' --repo ${{ github.repository }})
           if [ "$draft" != "true" ]; then
             echo "No draft release to publish"
             exit 0
@@ -66,4 +66,4 @@ jobs:
           fi
           # Publish the release
           echo "Publishing draft release ${{ steps.create_release.outputs.tag_name }}"
-          gh release edit ${{ steps.create_release.outputs.tag_name }} --draft=false
+          gh release edit ${{ steps.create_release.outputs.tag_name }} --draft=false --repo ${{ github.repository }}
