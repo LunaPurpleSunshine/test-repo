@@ -1,6 +1,13 @@
 name: Release Drafter
 
 on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish draft release?"
+        type: boolean
+        required: true
+        default: false
   push:
     # branches to consider in the event; optional, defaults to all
     branches:
