@@ -39,10 +39,33 @@ jobs:
       #    echo "GHE_HOST=${GITHUB_SERVER_URL##https:\/\/}" >> $GITHUB_ENV
 
       # Drafts your next Release notes as Pull Requests are merged into "master"
-      - uses: release-drafter/release-drafter@v5
+      - name: Create Draft Release
+        id: create_release
+        uses: release-drafter/release-drafter@v5
         # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
         # with:
         #   config-name: my-config.yml
         #   disable-autolabeler: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Release
+        id: publish_release
+        # Only run this job on the scheduled cron job, not on pushes or PRs
+        if: ${{ github.event_name == 'schedule' }}
+        run: |
+          # Check if there is a draft release and exit if not
+          draft=$(gh release view ${{ steps.create_release.outputs.tag_name }} --json isDraft --jq '.isDraft')
+          if [ "$draft" != "true" ]; then
+            echo "No draft release to publish"
+            exit 0
+          fi
+          # Check if the body contains "No changes" and exit if so
+          body=$(${{ steps.create_release.outputs.body }})
+          if [ "$body" == *"No changes"* ]; then
+            echo "No changes to publish"
+            exit 0
+          fi
+          # Publish the release
+          echo "Publishing draft release ${{ steps.create_release.outputs.tag_name }}"
+          gh release edit ${{ steps.create_release.outputs.tag_name }} --draft=false
