@@ -2,12 +2,6 @@ name: Release Drafter
 
 on:
   workflow_dispatch:
-    inputs:
-      publish:
-        description: "Publish draft release?"
-        type: boolean
-        required: true
-        default: false
   push:
     # branches to consider in the event; optional, defaults to all
     branches:
@@ -19,6 +13,8 @@ on:
   # pull_request_target event is required for autolabeler to support PRs from forks
   # pull_request_target:
   #   types: [opened, reopened, synchronize]
+  schedule:
+    - cron: '0,30 16-21 * * 0'
 
 permissions:
   contents: read
@@ -52,7 +48,7 @@ jobs:
       - name: Publish Release
         id: publish_release
         # Only run this job on the scheduled cron job, not on pushes or PRs
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.workflow_dispatch.inputs.publish == 'true')
+        if: github.event_name == 'schedule'
         run: |
           # Check if there is a draft release and exit if not
           draft=$(gh release view ${{ steps.create_release.outputs.tag_name }} --json isDraft --jq '.isDraft')
