@@ -49,6 +49,8 @@ jobs:
         id: publish_release
         # Only run this job on the scheduled cron job, not on pushes or PRs
         if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Check if there is a draft release and exit if not
           draft=$(gh release view ${{ steps.create_release.outputs.tag_name }} --json isDraft --jq '.isDraft')
