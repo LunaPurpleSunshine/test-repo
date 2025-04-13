@@ -52,7 +52,7 @@ jobs:
       - name: Publish Release
         id: publish_release
         # Only run this job on the scheduled cron job, not on pushes or PRs
-        if: ${{ github.event_name == 'schedule' }}
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.workflow_dispatch.inputs.publish == 'true')
         run: |
           # Check if there is a draft release and exit if not
           draft=$(gh release view ${{ steps.create_release.outputs.tag_name }} --json isDraft --jq '.isDraft')
