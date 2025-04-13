@@ -59,8 +59,8 @@ jobs:
             exit 0
           fi
           # Check if the body contains "No changes" and exit if so
-          body="$(${{ steps.create_release.outputs.body }})"
-          if [ "$body" == *"No changes"* ]; then
+          echo "${{ steps.create_release.outputs.body }}" >> ./body.txt
+          if [ "$(cat ./body.txt | grep -c "No changes")" != "0" ]; then
             echo "No changes to publish"
             exit 0
           fi
