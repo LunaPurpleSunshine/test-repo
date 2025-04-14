@@ -1,3 +1,3 @@
-# Release Drafter Test Repo
+# GitHub Actions Test Repo
 
-Test repository for [release-drafter](https://github.com/release-drafter/release-drafter) workflow
+Test repository for workflows
