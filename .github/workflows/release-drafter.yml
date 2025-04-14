@@ -28,6 +28,10 @@ jobs:
       # otherwise, read permission is required at least
       pull-requests: write
     runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.create_release.outputs.tag_name }}
+      body: ${{ steps.create_release.outputs.body }}
+
     steps:
       # (Optional) GitHub Enterprise requires GHE_HOST variable set
       #- name: Set GHE_HOST
@@ -45,25 +49,41 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish Release
-        id: publish_release
-        # Only run this job on the scheduled cron job, not on pushes or PRs
-        if: github.event_name == 'schedule'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  publish_release:
+    # Only run this job on the scheduled cron job, not on pushes or PRs
+    if: ${{ github.event_name == 'schedule' }}
+    needs: update_release_draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # for gh actions to create a release
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Check Release
+        id: check_release
         run: |
+          echo "${{ needs.update_release_draft.outputs.body }}" >> ./body.txt
           # Check if there is a draft release and exit if not
-          draft=$(gh release view ${{ steps.create_release.outputs.tag_name }} --json isDraft --jq '.isDraft' --repo ${{ github.repository }})
+          draft=$(gh release view ${{ needs.update_release_draft.outputs.tag_name }} --json isDraft --jq '.isDraft' --repo ${{ github.repository }})
+
+          do_release_check=false
           if [ "$draft" != "true" ]; then
             echo "No draft release to publish"
-            exit 0
-          fi
-          # Check if the body contains "No changes" and exit if so
-          echo "${{ steps.create_release.outputs.body }}" >> ./body.txt
-          if [ "$(cat ./body.txt | grep -c "No changes")" != "0" ]; then
+            do_release_check=false
+            # Check if the body contains "No changes" and exit if so
+          elif [ "$(cat ./body.txt | grep -c "No changes")" != "0" ]; then
             echo "No changes to publish"
-            exit 0
+            do_release_check=false
+          else
+            do_release_check=true
           fi
-          # Publish the release
-          echo "Publishing draft release ${{ steps.create_release.outputs.tag_name }}"
-          gh release edit ${{ steps.create_release.outputs.tag_name }} --draft=false --repo ${{ github.repository }}
+          echo "do_release=$do_release_check"
+          echo "do_release=$do_release_check" >> $GITHUB_OUTPUT
+
+      - name: Publish Release
+        id: publish_release
+        if: ${{ steps.check_release.outputs.do_release == 'true' }}
+        run: |
+          echo "Publishing draft release ${{ needs.update_release_draft.outputs.tag_name }}"
+          gh release edit ${{ needs.update_release_draft.outputs.tag_name }} --draft=false --repo ${{ github.repository }}
