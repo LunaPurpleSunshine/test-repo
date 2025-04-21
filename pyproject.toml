@@ -14,9 +14,6 @@ dev = [
     "hypothesis>=6.87.1",
 ]
 
-[project.scripts]
-roll-d6 = "randopy.rando:roll_d6"
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
