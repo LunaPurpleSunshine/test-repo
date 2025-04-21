@@ -1,22 +1,42 @@
-[tool.poetry]
+[project]
 name = "test-repo"
 version = "0.1.0"
 description = "Test repository, used to try stuff out."
-authors = ["Andrew Kinsman <69199502+LunaPurpleSunshine@users.noreply.github.com>"]
-license = "ISC"
+authors = [{ name = "Andrew Kinsman", email = "69199502+LunaPurpleSunshine@users.noreply.github.com" }]
+requires-python = "~=3.11"
 readme = "README.md"
+license = "ISC"
+dependencies = ["requests>=2.32.0,<3"]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-requests = "^2.32.0"
+[dependency-groups]
+dev = [
+    "pytest>=7.4.2",
+    "hypothesis>=6.87.1",
+]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.2"
-hypothesis = "^6.87.1"
+[project.scripts]
+roll-d6 = "randopy.rando:roll_d6"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.sdist]
+only-include = ["src"]
+[tool.hatch.build.targets.wheel]
+only-include = ["src"]
+
+######### Lint/Formatter Settings #########
+[tool.ruff]
+src = ["src/randopy", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "BLE", "A", "RUF", "TID252"]
+
+[tool.mypy]
+warn_unused_configs = true
+python_version = "3.13"
+warn_return_any = true
 
 [tool.isort]
 profile = "black"
@@ -29,4 +49,4 @@ xfail_strict = true
 markers = ["no_test_env"]
 
 [tool.coverage.run]
-source = ["./randopy"]
+source = ["./src/randopy"]
