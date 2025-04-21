@@ -2,6 +2,13 @@ name: Release Drafter
 
 on:
   workflow_dispatch:
+    inputs:
+      publish:
+        type: boolean
+        required: true
+        default: false
+        description: "Publish a new release"
+
   push:
     # branches to consider in the event; optional, defaults to all
     branches:
@@ -51,7 +58,7 @@ jobs:
 
   publish_release:
     # Only run this job on the scheduled cron job, not on pushes or PRs
-    if: ${{ github.event_name == 'schedule' }}
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.publish == 'true')
     needs: update_release_draft
     runs-on: ubuntu-latest
     permissions:
